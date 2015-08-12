@@ -11,13 +11,16 @@ def index(request):
 
 def district_view(request, district_id):
     districts = District.objects.filter(parentId=district_id)
+    commissions = Commission.objects.filter(parentId=district_id)
     v = District.objects.get(pk=district_id)
     breadcrumbs = []
     while v.parentId:
         breadcrumbs.append(v)
         v = District.objects.get(pk=v.parentId.id)
+    if v:
+        breadcrumbs.append(v)
 
     breadcrumbs.reverse()
 
-    context = {'voievodships': districts, 'breadcrumbs': breadcrumbs}
+    context = {'voievodships': districts,'commissions': commissions, 'breadcrumbs': breadcrumbs}
     return render(request, 'vote2/index.html', context)

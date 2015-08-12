@@ -2,28 +2,49 @@
 {% block title %} Voievodships {% endblock %}
 
 {% block content %}
+
+<ol class="breadcrumb">
+  <li><a href="/vote2">Home</a></li>
+  {% for breadcrumb in breadcrumbs %}
+    <li><a href="/vote2/district/{{ breadcrumb.id }}">{{ breadcrumb.name }}</a></li>
+  {% endfor %}
+</ol>
+
 <div class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title">
-
-      <ol class="breadcrumb">
-        <li><a href="/vote2">Home</a></li>
-        {% for breadcrumb in breadcrumbs %}
-          <li><a href="/vote2/district/{{ breadcrumb.id }}">{{ breadcrumb.name }}</a></li>
-        {% endfor %}
-      </ol>
+        Wybierz okręg
       </ol>
     </h3>
   </div>
-  <div class="panel-body">
+
     {% if voievodships %}
+    <div class="panel-body">
       <ul>
         {% for voievodship in voievodships %}
           <li><a href="/vote2/district/{{ voievodship.id }}/">{{ voievodship.name }}
           </a></li>
         {% endfor %}
       </ul>
+    </div>
     {% endif %}
-  </div>
+    {% if commissions %}
+    <table class="table">
+      <tr>
+        <th>Komisja</th>
+        <th>Komisja otrzymała kart do głosowania</th>
+        <th>Liczba wyborców uprawionych do głosowania</th>
+      </tr>
+        {% for commission in commissions %}
+        <tr>
+          <td>{{ commission.name }}</td>
+          <td>0</td>
+          <td>0</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+
 </div>
 {% endblock %}
