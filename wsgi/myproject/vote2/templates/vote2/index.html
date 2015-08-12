@@ -1,0 +1,8 @@
+{% if voievodships %}
+  <ul>
+    {% for voievodship in voievodships %}
+      <li><a href="/vote2/{{ voievodships.id }}/">{{ voievodship.name}}
+      </a></li>
+    {% endfor %}
+  </ul>
+{% endif %}
