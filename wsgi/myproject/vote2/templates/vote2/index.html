@@ -1,15 +1,16 @@
 {% extends "vote2/base.html" %}
 {% block title %} Voievodships {% endblock %}
 
-{% block content %}
-
+{% navigation %}
 <ol class="breadcrumb">
   <li><a href="/vote2">Home</a></li>
   {% for breadcrumb in breadcrumbs %}
     <li><a href="/vote2/district/{{ breadcrumb.id }}">{{ breadcrumb.name }}</a></li>
   {% endfor %}
 </ol>
+{% endblock %}
 
+{% block content %}
 <div class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title">
