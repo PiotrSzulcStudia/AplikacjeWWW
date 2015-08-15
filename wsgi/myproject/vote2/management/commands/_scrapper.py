@@ -45,8 +45,7 @@ soup = get_page(base_url)
 def scrap_page(page_url, parent=None, selector='td.col5 .link1'):
 	try:
 		soup = get_page(page_url)
-	except URLError as e:
-		print e.reason
+	except Exception as e: #HTTPError doesn't work
 		return
 
 	for l in soup.select(selector):
