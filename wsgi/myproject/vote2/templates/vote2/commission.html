@@ -35,7 +35,10 @@
           {{ form.votersAllowedToVote }}
         </div>
         {{ form.timesModificated }}
-        <input type="submit" value="Zatwierdź" />
+        <button type="submit" class="btn btn-success">Zatwierdź</button>
+    </form>
+    <form action="../../district/{{ districtParent.id }}">
+      <input type="submit" value="Wróć">
     </form>
   </div>
 </div>
