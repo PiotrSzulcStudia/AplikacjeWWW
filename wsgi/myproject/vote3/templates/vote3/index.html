@@ -57,11 +57,11 @@
             <td>{{ commission.name }}</td>
             <td>
               <span class="noedit cards">{{ commission.receivedCardsToVote }}</span>
-              <input class="edit cards">
+              <input class="edit cards" type="number">
             </td>
             <td>
               <span class="noedit voters">{{ commission.votersAllowedToVote }}</span>
-              <input class="edit voters">
+              <input class="edit voters" type="number">
             </td>
             <td>
               <input type="hidden" class="idCommission" name="idCommission" value="{{ commission.id }}">
