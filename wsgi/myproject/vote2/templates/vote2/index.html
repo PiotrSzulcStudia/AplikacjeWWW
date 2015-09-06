@@ -1,9 +1,9 @@
 {% extends "vote2/base.html" %}
-{% block title %} Voievodships {% endblock %}
+{% block title %} Wybierz jednostkę {% endblock %}
 
 {% block navigation %}
 <ol class="breadcrumb">
-  <li><a href="/vote2">Home</a></li>
+  <li><a href="/vote2">Strona Główna</a></li>
   {% for breadcrumb in breadcrumbs %}
     <li><a href="/vote2/district/{{ breadcrumb.id }}">{{ breadcrumb.name }}</a></li>
   {% endfor %}
@@ -15,7 +15,7 @@
 {% if error %}
 <div class="alert alert-danger" role="alert">
   <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-  <span class="sr-only">Error:</span>
+  <span class="sr-only">Błąd:</span>
   {{ error }}
 </div>
 {% endif %}

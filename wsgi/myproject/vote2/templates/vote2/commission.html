@@ -9,14 +9,27 @@
 {% if formError %}
 <div class="alert alert-danger" role="alert">
   <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-  <span class="sr-only">Error:</span>
+  <span class="sr-only">Błąd:</span>
   {{ formError }}
 </div>
 {% endif %}
 
+<div class="page-header">
+  <h1>{{ commission.name }}<small>Wprowadź dane dla jednostki</small></h1>
+</div>
+
 <form action="" method="post">
     {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Submit" />
+    {{ form.non_field_errors }}
+    <div class="form-group">
+      <label for={{ form.receivedCardsToVote.id_for_label }}>Otrzymano kart do głosowania</label>
+      {{ form.receivedCardsToVote }}
+    </div>
+    <div class="form-group">
+      <label for={{ form.votersAllowedToVote.id_for_label }}>Uprawnionych do głosowania</label>
+      {{ form.votersAllowedToVote }}
+    </div>
+    {{ form.timesModificated }}
+    <input type="submit" value="Zatwierdź" />
 </form>
 {% endblock %}
