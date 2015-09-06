@@ -37,6 +37,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'vote2',
+    'vote3',
+    'selector',
 )
 
 MIDDLEWARE_CLASSES = (

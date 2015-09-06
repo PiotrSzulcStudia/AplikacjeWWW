@@ -46,7 +46,6 @@ def commision_view(request, commission_id):
 
             if curTimesModificated > formTimesModificated:
                 formError = 'Nieaktualne dane'
-                # return render(request, 'vote2/commission.html', {'form': form, 'formError': formError})
                 return district_view(request, districtParent.id, "Zmodyfikowano dane w trakcie edycji")
             formVoters = form.cleaned_data['votersAllowedToVote']
             formCards = form.cleaned_data['receivedCardsToVote']
@@ -55,7 +54,7 @@ def commision_view(request, commission_id):
                 formError = 'Ujemne dane'
                 return render(request, 'vote2/commission.html', {'form': form, 'formError': formError, 'commission': commission,
                 'districtParent': districtParent})
-                
+
             commission.receivedCardsToVote = formCards
             commission.votersAllowedToVote = formVoters
             commission.timesModificated = curTimesModificated + 1

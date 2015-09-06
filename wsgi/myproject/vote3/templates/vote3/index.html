@@ -1,0 +1,207 @@
+{% extends "vote3/base.html" %}
+{% block title %} Wybierz jednostkę {% endblock %}
+
+{% block styles %}
+<style>
+
+
+.edit {
+}
+
+tr .edit {
+  display: none;
+}
+
+
+tr.edit .edit {
+  display: initial;
+}
+
+tr.edit .noedit {
+  display: none;
+}
+
+</style>
+{% endblock %}
+
+{% block navigation %}
+<ol class="breadcrumb">
+  <li><a href="/vote3">Strona Główna</a></li>
+  {% for breadcrumb in breadcrumbs %}
+    <li><a href="/vote3/district/{{ breadcrumb.id }}">{{ breadcrumb.name }}</a></li>
+  {% endfor %}
+</ol>
+{% endblock %}
+
+{% block content %}
+
+{% if error %}
+<div class="alert alert-danger" role="alert">
+  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+  <span class="sr-only">Błąd:</span>
+  {{ error }}
+</div>
+{% endif %}
+
+{% if success %}
+<div class="alert alert-success" role="alert">Dane zostały zapisane</div>
+{% endif %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+        Wybierz okręg
+      </ol>
+    </h3>
+  </div>
+
+    {% if voievodships %}
+    <div class="panel-body">
+      <ul>
+        {% for voievodship in voievodships %}
+          <li><a href="/vote3/district/{{ voievodship.id }}/">{{ voievodship.name }}
+          </a></li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+    {% if commissions %}
+    <table class="table table-striped">
+      <tr>
+        <th>Komisja</th>
+        <th>Komisja otrzymała kart do głosowania</th>
+        <th>Liczba wyborców uprawionych do głosowania</th>
+        <th>Edycja</th>
+      </tr>
+        {% for commission in commissions %}
+        <tr class="my-hover noedit" data-id="{{ commission.id }}">
+          <form action="/vote3/api/commission/" method="POST" class="post-form">
+            {% csrf_token %}
+            <td>{{ commission.name }}</td>
+            <td>
+              <span class="noedit cards">{{ commission.receivedCardsToVote }}</span>
+              <input class="edit cards">
+            </td>
+            <td>
+              <span class="noedit voters">{{ commission.votersAllowedToVote }}</span>
+              <input class="edit voters">
+            </td>
+            <td>
+              {{ form.timesModificated }}
+              <input type="hidden" class="idCommission" name="idCommission" value="{{ commission.id }}">
+              <input type="hidden" class="modificationCount" name="modificationCount" value="0">
+              <button type="button" class="btn btn-default button-edit noedit" name="button">Edytuj</button>
+              <button type="submit" data-id="{{ commission.id }}"class="btn btn-primary button-save edit">Zapisz</button>
+              <button type="button" class="btn btn-danger button-cancel edit">Anuluj</button>
+            </td>
+          </form>
+        </tr>
+
+        {% endfor %}
+    </table>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+  $(function() {
+
+    function updateRecord($tr, cid) {
+      $.get('/vote3/api/commission/', {commission_id: cid}, function(json){
+        $tr.find('span.cards').html(json.cards)
+        $tr.find('span.voters').html(json.voters);
+        $tr.find('input.cards').val(json.cards);
+        $tr.find('input.voters').val(json.voters);
+        $tr.find('.modificationCount').val(json.timesModificated);
+      })
+    }
+
+    $('.button-edit').on('click', function() {
+
+      if ($('tr.edit').length) {
+        if (!confirm('Chcesz anulować wpisywanie tej wartości?')) {
+          return;
+        }
+      }
+      $('tr.edit').removeClass('edit');
+      var $tr = $(this).closest('tr');
+      var cid = $tr.attr('data-id');
+      updateRecord($tr, cid)
+      $tr.addClass('edit');
+      $tr.find('input.cards').focus();
+    });
+
+    $('.button-cancel').on('click', function() {
+        var $tr = $(this).closest('tr');
+        $tr.removeClass('edit');
+    });
+
+    $('.post-form').on('submit', function(event) {
+        event.preventDefault();
+        var $tr = $(this).closest('tr');
+        var new_data = {
+            cards: $tr.find('input.cards').val(),
+            voters: $tr.find('input.voters').val()
+        };
+
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        var csrftoken = getCookie('csrftoken');
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+
+        $.ajax({
+          type: 'POST',
+          url: '/vote3/api/commission/',
+          data: {"commission_id": $tr.find(".idCommission").val(),
+          "times_modificated": $tr.find(".modificationCount").val(),
+          "cards": $tr.find('input.cards').val(), "voters": $tr.find('input.voters').val()
+      },
+          success: function(json) {
+            if (json.status === "ok") {
+              $tr.find('span.cards').html(json.cards);
+              $tr.find('span.voters').html(json.voters);
+              $tr.find(".modificationCount").val(json.timesModificated)
+              $tr.removeClass('edit');
+            } else if (json.status === "error") {
+              alert("Serwer zgłosił błąd: " + json.error_msg);
+
+              if (json.error_type === 'modification') {
+                $tr.removeClass('edit');
+                updateRecord($tr, $tr.find(".idCommission").val());
+              }
+            }
+          },
+          error: function(xhr,errmsg,err) {
+            alert("Błąd podczas zapisywania! " + xhr.responseText);
+          }
+        })
+    });
+ });
+</script>
+{% endblock %}
