@@ -28,6 +28,9 @@ def district_view(request, district_id, error='', success=''):
     context = {'voievodships': districts,'commissions': commissions, 'breadcrumbs': breadcrumbs, 'error': error, 'success': success}
     return render(request, 'vote2/index.html', context)
 
+def invalid_view(request):
+    return HttpResponseRedirect('/vote2')
+    
 def commision_view(request, commission_id):
     formError =''
     commission = Commission.objects.get(pk=commission_id)
