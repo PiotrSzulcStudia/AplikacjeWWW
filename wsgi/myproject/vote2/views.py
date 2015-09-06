@@ -12,7 +12,7 @@ def index(request):
     context = {'voievodships': voievodships}
     return render(request, 'vote2/index.html', context)
 
-def district_view(request, district_id, error=''):
+def district_view(request, district_id, error='', success=''):
     districts = District.objects.filter(parentId=district_id)
     commissions = Commission.objects.filter(parentId=district_id)
     v = District.objects.get(pk=district_id)
@@ -25,7 +25,7 @@ def district_view(request, district_id, error=''):
 
     breadcrumbs.reverse()
 
-    context = {'voievodships': districts,'commissions': commissions, 'breadcrumbs': breadcrumbs, 'error': error}
+    context = {'voievodships': districts,'commissions': commissions, 'breadcrumbs': breadcrumbs, 'error': error, 'success': success}
     return render(request, 'vote2/index.html', context)
 
 def commision_view(request, commission_id):
@@ -57,7 +57,9 @@ def commision_view(request, commission_id):
             commission.timesModificated = curTimesModificated + 1
             commission.save()
 
-            return HttpResponseRedirect('../../district/'+ str(districtParent.id))
+
+            return district_view(request, districtParent.id, '', success=True)
+            # return HttpResponseRedirect('../../district/'+ str(districtParent.id))
 
     else:
         form = CommissionForm(initial={"receivedCardsToVote": commission.receivedCardsToVote,
