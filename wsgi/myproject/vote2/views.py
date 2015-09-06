@@ -30,7 +30,7 @@ def district_view(request, district_id, error='', success=''):
 
 def invalid_view(request):
     return HttpResponseRedirect('/vote2')
-    
+
 def commision_view(request, commission_id):
     formError =''
     commission = Commission.objects.get(pk=commission_id)
@@ -47,7 +47,8 @@ def commision_view(request, commission_id):
             if curTimesModificated > formTimesModificated:
                 formError = 'Nieaktualne dane'
                 # return render(request, 'vote2/commission.html', {'form': form, 'formError': formError})
-                return district_view(request, districtParent.id, "Zmodyfikowano dane w trakcie edycji")
+                return render(request, 'vote2/commission.html', {'form': form, 'formError': formError, 'commission': commission,
+                    'districtParent': districtParent})
             formVoters = form.cleaned_data['votersAllowedToVote']
             formCards = form.cleaned_data['receivedCardsToVote']
 
