@@ -1,29 +1,6 @@
 {% extends "vote3/base.html" %}
 {% block title %} Wybierz jednostkę {% endblock %}
 
-{% block styles %}
-<style>
-
-
-.edit {
-}
-
-tr .edit {
-  display: none;
-}
-
-
-tr.edit .edit {
-  display: initial;
-}
-
-tr.edit .noedit {
-  display: none;
-}
-
-</style>
-{% endblock %}
-
 {% block navigation %}
 <ol class="breadcrumb">
   <li><a href="/vote3">Strona Główna</a></li>
@@ -87,7 +64,6 @@ tr.edit .noedit {
               <input class="edit voters">
             </td>
             <td>
-              {{ form.timesModificated }}
               <input type="hidden" class="idCommission" name="idCommission" value="{{ commission.id }}">
               <input type="hidden" class="modificationCount" name="modificationCount" value="0">
               <button type="button" class="btn btn-default button-edit noedit" name="button">Edytuj</button>
@@ -119,7 +95,6 @@ tr.edit .noedit {
     }
 
     $('.button-edit').on('click', function() {
-
       if ($('tr.edit').length) {
         if (!confirm('Chcesz anulować wpisywanie tej wartości?')) {
           return;
@@ -141,10 +116,6 @@ tr.edit .noedit {
     $('.post-form').on('submit', function(event) {
         event.preventDefault();
         var $tr = $(this).closest('tr');
-        var new_data = {
-            cards: $tr.find('input.cards').val(),
-            voters: $tr.find('input.voters').val()
-        };
 
         function getCookie(name) {
             var cookieValue = null;
@@ -179,9 +150,9 @@ tr.edit .noedit {
           type: 'POST',
           url: '/vote3/api/commission/',
           data: {"commission_id": $tr.find(".idCommission").val(),
-          "times_modificated": $tr.find(".modificationCount").val(),
-          "cards": $tr.find('input.cards').val(), "voters": $tr.find('input.voters').val()
-      },
+                "times_modificated": $tr.find(".modificationCount").val(),
+                "cards": $tr.find('input.cards').val(), "voters": $tr.find('input.voters').val()
+          },
           success: function(json) {
             if (json.status === "ok") {
               $tr.find('span.cards').html(json.cards);
