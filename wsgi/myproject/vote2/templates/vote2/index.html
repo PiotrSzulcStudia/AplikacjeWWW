@@ -38,9 +38,9 @@
       </tr>
         {% for commission in commissions %}
         <tr>
-          <td>{{ commission.name }}</td>
-          <td>0</td>
-          <td>0</td>
+          <td><a href="../../commission/{{ commission.id }}">{{ commission.name }}</a></td>
+          <td>{{ commission.receivedCardsToVote }}</td>
+          <td>{{ commission.votersAllowedToVote }}</td>
         </tr>
         {% endfor %}
     </table>

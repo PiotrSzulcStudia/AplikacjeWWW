@@ -13,6 +13,7 @@ class Commission(models.Model):
     parentId = models.ForeignKey(District)
     receivedCardsToVote = models.IntegerField(default=0)
     votersAllowedToVote = models.IntegerField(default=0)
+    timesModificated = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name.encode('utf8')
