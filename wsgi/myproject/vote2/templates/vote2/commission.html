@@ -1,7 +1,7 @@
 {% extends "vote2/base.html" %}
 {% block title %} Wprowadź dane komisji {% endblock %}
 {% block navigation %}
-<a href="../../district/{{ districtParent.id }}">Wróć</a>
+<!--<a href="../../district/{{ districtParent.id }}">Wróć</a>-->
 {% endblock %}
 
 {% block content %}
@@ -15,7 +15,7 @@
 {% endif %}
 
 <div class="page-header">
-  <h1>Wprowadź dane dla jednostki</h1>
+  <h1>Wprowadź dane dla jednostki <small><a href="../../district/{{ districtParent.id }}">Wróć</a></small></h1>
 </div>
 
 <div class="panel panel-default">
@@ -35,10 +35,7 @@
           {{ form.votersAllowedToVote }}
         </div>
         {{ form.timesModificated }}
-        <button type="submit" class="btn btn-success">Zatwierdź</button>
-    </form>
-    <form action="../../district/{{ districtParent.id }}">
-      <input type="submit" value="Wróć">
+        <button type="submit" class="btn btn-default">Zatwierdź</button>
     </form>
   </div>
 </div>
