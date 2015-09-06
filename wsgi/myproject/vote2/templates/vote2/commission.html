@@ -15,21 +15,29 @@
 {% endif %}
 
 <div class="page-header">
-  <h1>{{ commission.name }}<small>Wprowadź dane dla jednostki</small></h1>
+  <h1>>Wprowadź dane dla jednostki</h1>
 </div>
 
-<form action="" method="post">
-    {% csrf_token %}
-    {{ form.non_field_errors }}
-    <div class="form-group">
-      <label for={{ form.receivedCardsToVote.id_for_label }}>Otrzymano kart do głosowania</label>
-      {{ form.receivedCardsToVote }}
-    </div>
-    <div class="form-group">
-      <label for={{ form.votersAllowedToVote.id_for_label }}>Uprawnionych do głosowania</label>
-      {{ form.votersAllowedToVote }}
-    </div>
-    {{ form.timesModificated }}
-    <input type="submit" value="Zatwierdź" />
-</form>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">{{ commission.name }}</h3>
+  </div>
+  <div class="panel-body">
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="form-group">
+          <label for={{ form.receivedCardsToVote.id_for_label }}>Otrzymano kart do głosowania</label>
+          {{ form.receivedCardsToVote }}
+        </div>
+        <div class="form-group">
+          <label for={{ form.votersAllowedToVote.id_for_label }}>Uprawnionych do głosowania</label>
+          {{ form.votersAllowedToVote }}
+        </div>
+        {{ form.timesModificated }}
+        <input type="submit" value="Zatwierdź" />
+    </form>
+  </div>
+</div>
+
 {% endblock %}
